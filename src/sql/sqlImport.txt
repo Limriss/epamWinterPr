@@ -1,0 +1,50 @@
+create table statistics
+(
+    id serial not null
+        constraint statistics_pk
+            primary key,
+    name varchar not null,
+    stat int not null
+);
+
+create table words
+(
+    id serial not null
+        constraint words_pk
+            primary key,
+    rus varchar not null,
+    eng varchar not null
+);
+
+INSERT INTO words
+    (id, rus, eng)
+    VALUES (default, 'Карандаш', 'Pencil'),
+           (default, 'Ковёр', 'Carpet'),
+           (default, 'Мышь', 'Mouse'),
+           (default, 'Крыша', 'Roof'),
+           (default, 'Самолет', 'Airplane'),
+           (default, 'Поезд', 'Train'),
+           (default, 'Корабль', 'Ship'),
+           (default, 'Еда', 'Food'),
+           (default, 'Вода', 'Water'),
+           (default, 'Земля', 'Earth'),
+           (default, 'Воздух', 'Air'),
+           (default, 'Огонь', 'Fire'),
+           (default, 'Кровать', 'Bed'),
+           (default, 'Дверь', 'Door'),
+           (default, 'Лифт', 'Elevator'),
+           (default, 'Небоскреб', 'Skyscraper'),
+           (default, 'Чай', 'Tea'),
+           (default, 'Кофе', 'Coffee'),
+           (default, 'Небо', 'Sky'),
+           (default, 'Космос', 'Space'),
+           (default, 'Планета', 'Planet'),
+           (default, 'Солнце', 'Sun'),
+           (default, 'Звезда', 'Star'),
+           (default, 'Сумка', 'Bag'),
+           (default, 'Телефон', 'Phone'),
+           (default, 'Число', 'Number'),
+           (default, 'Письмо', 'Letter'),
+           (default, 'Подушка', 'Pillow'),
+           (default, 'Молния', 'Lightning'),
+           (default, 'Дождь', 'Rain')
