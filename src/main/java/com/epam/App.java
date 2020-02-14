@@ -1,7 +1,7 @@
 package com.epam;
 
-import com.epam.dao.StatisticsDAO;
-import com.epam.dao.WordDAO;
+import com.epam.dao.StatisticsDAOImpl;
+import com.epam.dao.WordDAOImpl;
 import com.epam.domain.Statistic;
 import com.epam.domain.Word;
 
@@ -9,17 +9,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class App {
-    static WordDAO wordDAO;
-    static StatisticsDAO statisticsDAO;
-    static ArrayList<Statistic> stats;
+    static WordDAOImpl wordDAOImpl;
+    static StatisticsDAOImpl statisticsDAOImpl;
+    static HashMap<Integer, Statistic> stats;
+    static HashMap<Integer, Word> words;
 
 
     public static void main(String[] args){
-        wordDAO = new WordDAO();
-        statisticsDAO = new StatisticsDAO();
+        wordDAOImpl = new WordDAOImpl();
+        statisticsDAOImpl = new StatisticsDAOImpl();
 
         saveNewWord();
         printAllWords();
@@ -42,7 +43,7 @@ public class App {
             System.out.print("English: ");
             eng = reader.readLine();
 
-            wordDAO.create(rus, eng);
+            wordDAOImpl.create(rus, eng);
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
@@ -50,8 +51,8 @@ public class App {
 
     private static void printAllWords() {
         try {
-            ArrayList<Word> words = wordDAO.read();
-            for (Word word: words) {
+            words = wordDAOImpl.read();
+            for (Word word: words.values()) {
                 System.out.println("Id: " + word.getId() +
                         "; Russian: " + word.getRussian() +
                         "; English: " + word.getEnglish());
@@ -64,15 +65,16 @@ public class App {
     private static void saveNewStatistic(){
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        int rightCount, wrongCount;
+        String name;
+        byte stat;
         try{
-            System.out.print("Number of right choices: ");
-            rightCount = Integer.parseInt(reader.readLine());
+            System.out.print("Name: ");
+            name = reader.readLine();
 
-            System.out.print("Number of wrong choices: ");
-            wrongCount = Integer.parseInt(reader.readLine());
+            System.out.print("Stat: ");
+            stat = Byte.parseByte(reader.readLine());
 
-            statisticsDAO.create(rightCount, wrongCount);
+            statisticsDAOImpl.create(name, stat);
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
@@ -80,11 +82,11 @@ public class App {
 
     private static void printAllStatistics() {
         try {
-            stats = statisticsDAO.read();
-            for (Statistic statistic: stats) {
+            stats = statisticsDAOImpl.read();
+            for (Statistic statistic: stats.values()) {
                 System.out.println("Id: " + statistic.getId() +
-                        "; Number of right choices: " + statistic.getRightChoicesCount() +
-                        "; Number of wrong choices: " + statistic.getWrongChoicesCount());
+                        "; Name: " + statistic.getName() +
+                        "; Stat: " + statistic.getStat());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -94,7 +96,9 @@ public class App {
     private static void updateStatistic(){
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        int id, newRightCount, newWrongCount;
+        int id;
+        String newName;
+        byte newStat;
         try {
             System.out.print("Enter id: ");
             id = Integer.parseInt(reader.readLine());
@@ -104,13 +108,13 @@ public class App {
                 id = Integer.parseInt(reader.readLine());
             }
 
-            System.out.print("Enter new number of right choices: ");
-            newRightCount = Integer.parseInt(reader.readLine());
+            System.out.print("New name: ");
+            newName = reader.readLine();
 
-            System.out.print("Enter new number of wrong choices: ");
-            newWrongCount = Integer.parseInt(reader.readLine());
+            System.out.print("New stat: ");
+            newStat = Byte.parseByte(reader.readLine());
 
-            statisticsDAO.update(id, newRightCount, newWrongCount);
+            statisticsDAOImpl.update(id, newName, newStat);
 
         } catch (IOException | SQLException e) {
             e.printStackTrace();

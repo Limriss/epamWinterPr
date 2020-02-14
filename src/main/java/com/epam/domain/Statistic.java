@@ -2,32 +2,32 @@ package com.epam.domain;
 
 public class Statistic {
     private int id;
-    private int rightChoicesCount;
-    private int wrongChoicesCount;
+    private String name;
+    private byte stat;
 
-    public Statistic(int id, int rightChoicesCount, int wrongChoicesCount){
+    public Statistic(int id, String name, byte stat){
         this.id = id;
-        this.rightChoicesCount = rightChoicesCount;
-        this.wrongChoicesCount = wrongChoicesCount;
+        this.name = name;
+        this.stat = stat;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getRightChoicesCount() {
-        return rightChoicesCount;
+    public String getName() {
+        return name;
     }
 
-    public void setRightChoicesCount(int rightChoicesCount) {
-        this.rightChoicesCount = rightChoicesCount;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getWrongChoicesCount() {
-        return wrongChoicesCount;
+    public byte getStat() {
+        return stat;
     }
 
-    public void setWrongChoicesCount(int wrongChoicesCount) {
-        this.wrongChoicesCount = wrongChoicesCount;
+    public void setStat(byte stat) {
+        this.stat = stat;
     }
 }

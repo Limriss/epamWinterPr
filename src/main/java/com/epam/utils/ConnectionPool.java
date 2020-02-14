@@ -1,17 +1,19 @@
 package com.epam.utils;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class ConnectionPool {
 
     private static final int CAPACITY = 10;
-    private static final String url = "jdbc:postgresql://localhost:5432/epam_test_db";
-    private static final String user = "epamwinter";
-    private static final String password = "epamWinter";
+    private static String url;
+    private static String user;
+    private static String password;
     private static ConnectionPool pool;
     private static List<Connection> availableConnections;
 
@@ -22,7 +24,12 @@ public class ConnectionPool {
         if (localPool == null){
             try {
                 Class.forName("org.postgresql.Driver");
-            } catch (ClassNotFoundException e) {
+                Properties property = new Properties();
+                property.load(ConnectionPool.class.getClassLoader().getResourceAsStream("db.properties"));
+                url = property.getProperty("db.url");
+                user = property.getProperty("db.user");
+                password = property.getProperty("db.password");
+            } catch (ClassNotFoundException | IOException e) {
                 System.out.println("Driver not found");
             }
 

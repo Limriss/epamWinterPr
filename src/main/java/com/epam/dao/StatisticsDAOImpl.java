@@ -1,5 +1,6 @@
 package com.epam.dao;
 
+import com.epam.dao.interfaces.StatisticsDAO;
 import com.epam.domain.Statistic;
 import com.epam.utils.ConnectionPool;
 
@@ -7,21 +8,21 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.HashMap;
 
-public class StatisticsDAO implements com.epam.dao.interfaces.StatisticsDAO {
+public class StatisticsDAOImpl implements StatisticsDAO {
     private ConnectionPool pool;
 
-    public StatisticsDAO(){
+    public StatisticsDAOImpl(){
         pool = ConnectionPool.getInstance();
     }
 
     @Override
-    public void create(int rightChoicesCount, int wrongChoicesCount) throws SQLException{
+    public void create(String name, byte stat) throws SQLException{
         Statement statement = null;
         String query = "INSERT INTO statistics " +
-                "(id, right_choices_count, wrong_choices_count) " +
-                "VALUES (DEFAULT, '" + rightChoicesCount + "', '" + wrongChoicesCount + "');";
+                "(id, name, stat) " +
+                "VALUES (DEFAULT, '" + name + "', '" + stat + "');";
 
         Connection connection = pool.getConnection();
         try {
@@ -37,8 +38,8 @@ public class StatisticsDAO implements com.epam.dao.interfaces.StatisticsDAO {
     }
 
     @Override
-    public ArrayList<Statistic> read() throws SQLException{
-        ArrayList<Statistic> statistics = new ArrayList<>();
+    public HashMap<Integer, Statistic> read() throws SQLException{
+        HashMap<Integer, Statistic> statistics = new HashMap<>();
 
         Statement statement = null;
         String query = "SELECT * FROM statistics";
@@ -51,12 +52,12 @@ public class StatisticsDAO implements com.epam.dao.interfaces.StatisticsDAO {
 
             while (result.next()){
                 int id = result.getInt("id");
-                int rightCount = result.getInt("right_choices_count");
-                int wrongCount = result.getInt("wrong_choices_count");
+                String name = result.getString("name");
+                byte stat = result.getByte("stat");
 
-                Statistic tempStatistic = new Statistic(id, rightCount, wrongCount);
+                Statistic tempStatistic = new Statistic(id, name, stat);
 
-                statistics.add(tempStatistic);
+                statistics.put(id, tempStatistic);
             }
         } catch (SQLException e) {
             System.out.println("Statement creating error");
@@ -70,11 +71,11 @@ public class StatisticsDAO implements com.epam.dao.interfaces.StatisticsDAO {
     }
 
     @Override
-    public void update(int id, int rightChoicesCount, int wrongChoicesCount) throws SQLException{
+    public void update(int id, String name, byte stat) throws SQLException{
         Statement statement = null;
         String query = "UPDATE statistics " +
-                "SET right_choices_count = " + rightChoicesCount +
-                ", wrong_choices_count = " + wrongChoicesCount +
+                "SET name = '" + name +
+                "', stat = " + stat +
                 " WHERE id = " + id;
 
         Connection connection = pool.getConnection();
