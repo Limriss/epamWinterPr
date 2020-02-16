@@ -3,12 +3,10 @@ package com.epam.dao;
 import com.epam.dao.interfaces.WordDAO;
 import com.epam.domain.Word;
 import com.epam.utils.ConnectionPool;
+import com.epam.utils.SQLReader;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.HashMap;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class WordDAOImpl implements WordDAO {
     private ConnectionPool pool;
@@ -18,52 +16,48 @@ public class WordDAOImpl implements WordDAO {
     }
 
     @Override
-    public void create(String rus, String eng) throws SQLException {
-        Statement statement = null;
-        String query = "INSERT INTO words " +
-                "(id, rus, eng) " +
-                "VALUES (DEFAULT, '" + rus + "', '" + eng + "');";
+    public String create(Word word) throws SQLException {
+        String result;
 
+        String query = SQLReader.readSQL("createWord.sql");
         Connection connection = pool.getConnection();
-        try {
-            statement = connection.createStatement();
-            statement.executeUpdate(query);
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, word.getRussian());
+            statement.setString(2, word.getEnglish());
+
+            int rows = statement.executeUpdate();
+            result = rows + " rows was created";
         } catch (SQLException e) {
             System.out.println("Statement creating error");
+            result = "Statement creating error";
         } finally {
-            if (statement != null)
-                statement.close();
             pool.realiseConnection(connection);
         }
+        return result;
     }
 
     @Override
-    public HashMap<Integer, Word> read() throws SQLException {
-        HashMap<Integer, Word> words = new HashMap<>();
+    public ArrayList<Word> read() throws SQLException {
+        ArrayList<Word> words = new ArrayList<>();
 
-        Statement statement = null;
-        String query = "SELECT * FROM words";
-
+        String query = SQLReader.readSQL("readWords.sql");
         Connection connection = pool.getConnection();
 
-        try {
-            statement = connection.createStatement();
+        try (Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery(query);
 
-            while (result.next()){
-                int id = result.getInt("id");
+            while (result.next()) {
                 String russian = result.getString("rus");
                 String english = result.getString("eng");
 
-                Word tempWord = new Word(id, russian, english);
+                Word tempWord = new Word(russian, english);
 
-                words.put(id, tempWord);
+                words.add(tempWord);
             }
         } catch (SQLException e) {
             System.out.println("Statement creating error");
         } finally {
-            if (statement != null)
-                statement.close();
             pool.realiseConnection(connection);
         }
 

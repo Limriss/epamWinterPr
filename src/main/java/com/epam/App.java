@@ -9,13 +9,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class App {
     static WordDAOImpl wordDAOImpl;
     static StatisticsDAOImpl statisticsDAOImpl;
-    static HashMap<Integer, Statistic> stats;
-    static HashMap<Integer, Word> words;
+    static ArrayList<Statistic> stats;
+    static ArrayList<Word> words;
 
 
     public static void main(String[] args){
@@ -43,7 +43,8 @@ public class App {
             System.out.print("English: ");
             eng = reader.readLine();
 
-            wordDAOImpl.create(rus, eng);
+            String result = wordDAOImpl.create(new Word(rus, eng));
+            System.out.println(result);
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
@@ -52,10 +53,9 @@ public class App {
     private static void printAllWords() {
         try {
             words = wordDAOImpl.read();
-            for (Word word: words.values()) {
-                System.out.println("Id: " + word.getId() +
-                        "; Russian: " + word.getRussian() +
-                        "; English: " + word.getEnglish());
+            for (Word word: words) {
+                System.out.println("Russian: " + word.getRussian() +
+                                   "; English: " + word.getEnglish());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,7 +74,8 @@ public class App {
             System.out.print("Stat: ");
             stat = Byte.parseByte(reader.readLine());
 
-            statisticsDAOImpl.create(name, stat);
+            String result = statisticsDAOImpl.create(new Statistic(name, stat));
+            System.out.println(result);
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
@@ -83,10 +84,9 @@ public class App {
     private static void printAllStatistics() {
         try {
             stats = statisticsDAOImpl.read();
-            for (Statistic statistic: stats.values()) {
-                System.out.println("Id: " + statistic.getId() +
-                        "; Name: " + statistic.getName() +
-                        "; Stat: " + statistic.getStat());
+            for (Statistic statistic: stats) {
+                System.out.println("Name: " + statistic.getName() +
+                                   "; Stat: " + statistic.getStat());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -96,25 +96,17 @@ public class App {
     private static void updateStatistic(){
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        int id;
-        String newName;
-        byte newStat;
+        String name;
+        byte stat;
         try {
-            System.out.print("Enter id: ");
-            id = Integer.parseInt(reader.readLine());
+            System.out.print("Enter name: ");
+            name = reader.readLine();
 
-            while (stats.size() < id | id <= 0) {
-                System.out.print("Wrong id. Enter another: ");
-                id = Integer.parseInt(reader.readLine());
-            }
+            System.out.print("Enter new stat: ");
+            stat = Byte.parseByte(reader.readLine());
 
-            System.out.print("New name: ");
-            newName = reader.readLine();
-
-            System.out.print("New stat: ");
-            newStat = Byte.parseByte(reader.readLine());
-
-            statisticsDAOImpl.update(id, newName, newStat);
+            String result = statisticsDAOImpl.update(new Statistic(name, stat));
+            System.out.println(result);
 
         } catch (IOException | SQLException e) {
             e.printStackTrace();
