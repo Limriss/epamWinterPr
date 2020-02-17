@@ -1,0 +1,1 @@
+UPDATE statistics SET stat = ? WHERE name = ?

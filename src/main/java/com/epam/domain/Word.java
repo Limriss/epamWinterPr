@@ -1,18 +1,12 @@
 package com.epam.domain;
 
 public class Word {
-    int id;
-    String russian;
-    String english;
+    private String russian;
+    private String english;
 
-    public Word(int id, String russian, String english){
-        this.id = id;
+    public Word(String russian, String english){
         this.russian = russian;
         this.english = english;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getRussian() {

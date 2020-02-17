@@ -3,12 +3,10 @@ package com.epam.dao;
 import com.epam.dao.interfaces.StatisticsDAO;
 import com.epam.domain.Statistic;
 import com.epam.utils.ConnectionPool;
+import com.epam.utils.SQLReader;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.HashMap;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class StatisticsDAOImpl implements StatisticsDAO {
     private ConnectionPool pool;
@@ -18,52 +16,53 @@ public class StatisticsDAOImpl implements StatisticsDAO {
     }
 
     @Override
-    public void create(String name, byte stat) throws SQLException{
-        Statement statement = null;
-        String query = "INSERT INTO statistics " +
-                "(id, name, stat) " +
-                "VALUES (DEFAULT, '" + name + "', '" + stat + "');";
+    public String create(Statistic statistic) throws SQLException{
+        PreparedStatement statement = null;
+        String result;
+
+        String query = SQLReader.readSQL("createStatistic.sql");
 
         Connection connection = pool.getConnection();
         try {
-            statement = connection.createStatement();
-            statement.executeUpdate(query);
+            statement = connection.prepareStatement(query);
+            statement.setString(1, statistic.getName());
+            statement.setByte(2, statistic.getStat());
+
+            int rows = statement.executeUpdate();
+            result = rows + " rows was created";
         } catch (SQLException e) {
             System.out.println("Statement creating error");
+            result = "Statement creating error";
         } finally {
             if (statement != null)
                 statement.close();
             pool.realiseConnection(connection);
         }
+
+        return result;
     }
 
     @Override
-    public HashMap<Integer, Statistic> read() throws SQLException{
-        HashMap<Integer, Statistic> statistics = new HashMap<>();
+    public ArrayList<Statistic> read() throws SQLException{
+        ArrayList<Statistic> statistics = new ArrayList<>();
 
-        Statement statement = null;
-        String query = "SELECT * FROM statistics";
-
+        String query = SQLReader.readSQL("readStatistics.sql");
         Connection connection = pool.getConnection();
 
-        try {
-            statement = connection.createStatement();
+        try (Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery(query);
 
-            while (result.next()){
-                int id = result.getInt("id");
+            while (result.next()) {
                 String name = result.getString("name");
                 byte stat = result.getByte("stat");
 
-                Statistic tempStatistic = new Statistic(id, name, stat);
+                Statistic tempStatistic = new Statistic(name, stat);
 
-                statistics.put(id, tempStatistic);
+                statistics.add(tempStatistic);
             }
         } catch (SQLException e) {
             System.out.println("Statement creating error");
         } finally {
-            if (statement != null)
-                statement.close();
             pool.realiseConnection(connection);
         }
 
@@ -71,24 +70,24 @@ public class StatisticsDAOImpl implements StatisticsDAO {
     }
 
     @Override
-    public void update(int id, String name, byte stat) throws SQLException{
-        Statement statement = null;
-        String query = "UPDATE statistics " +
-                "SET name = '" + name +
-                "', stat = " + stat +
-                " WHERE id = " + id;
+    public String update(Statistic statistic) throws SQLException{
+        String result;
 
+        String query = SQLReader.readSQL("updateStatistic.sql");
         Connection connection = pool.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setByte(1, statistic.getStat());
+            statement.setString(2, statistic.getName());
 
-        try{
-            statement = connection.createStatement();
-            statement.executeUpdate(query);
+            int rows = statement.executeUpdate();
+            result = rows + " rows was changed";
         } catch (SQLException e) {
             System.out.println("Statement creating error");
+            result = "Statement creating error";
         } finally {
-            if (statement != null)
-                statement.close();
             pool.realiseConnection(connection);
         }
+
+        return result;
     }
 }

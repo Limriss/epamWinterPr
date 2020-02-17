@@ -1,0 +1,1 @@
+INSERT INTO statistics (id, name, stat) VALUES (DEFAULT, ?, ?)
