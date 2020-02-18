@@ -16,4 +16,8 @@ public class Statistic {
     public byte getStat() {
         return stat;
     }
+
+    public void setStat(byte stat) {
+        this.stat = stat;
+    }
 }

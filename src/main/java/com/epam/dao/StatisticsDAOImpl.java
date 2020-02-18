@@ -29,7 +29,7 @@ public class StatisticsDAOImpl implements StatisticsDAO {
             statement.setByte(2, statistic.getStat());
 
             int rows = statement.executeUpdate();
-            result = rows + " rows was created";
+            result = "Success";
         } catch (SQLException e) {
             System.out.println("Statement creating error");
             result = "Statement creating error";
@@ -80,7 +80,7 @@ public class StatisticsDAOImpl implements StatisticsDAO {
             statement.setString(2, statistic.getName());
 
             int rows = statement.executeUpdate();
-            result = rows + " rows was changed";
+            result = "Success";
         } catch (SQLException e) {
             System.out.println("Statement creating error");
             result = "Statement creating error";
