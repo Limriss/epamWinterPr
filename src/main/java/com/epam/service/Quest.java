@@ -7,15 +7,27 @@ import com.epam.domain.Word;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Quest {
-    private static WordDAOImpl wordDAOImpl = new WordDAOImpl();
-    private static StatisticsDAOImpl statisticsDAOImpl = new StatisticsDAOImpl();
-    private static ArrayList<Statistic> stats;
-    private static ArrayList<Word> words;
+    private WordDAOImpl wordDAOImpl = new WordDAOImpl();
+    private StatisticsDAOImpl statisticsDAOImpl = new StatisticsDAOImpl();
+    private ArrayList<Statistic> stats;
+    private ArrayList<Word> words;
 
-    public static String statistic(String name, int wongGamesCount, int lostGamesCount){
-        String result = "";
+    public void testChanging(){
+        Scanner reader = new Scanner(System.in);
+
+        String name = reader.nextLine();
+        int wonCount = reader.nextInt();
+        int lostCount = reader.nextInt();
+
+        String result = statistic(name, wonCount, lostCount);
+        System.out.println(result);
+    }
+
+    private String statistic(String name, int wongGamesCount, int lostGamesCount){
+        String result;
         byte stat = (byte) (100 * wongGamesCount / (wongGamesCount + lostGamesCount));
 
         try {
@@ -37,7 +49,7 @@ public class Quest {
         return result;
     }
 
-    private static Statistic getStatisticByName(String name){
+    private Statistic getStatisticByName(String name){
         int i = 0;
         while (i < stats.size()){
             if (stats.get(i).getName().equals(name))
