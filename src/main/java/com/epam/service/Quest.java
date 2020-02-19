@@ -1,19 +1,15 @@
 package com.epam.service;
 
 import com.epam.dao.StatisticsDAOImpl;
-import com.epam.dao.WordDAOImpl;
 import com.epam.domain.Statistic;
-import com.epam.domain.Word;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Quest {
-    private WordDAOImpl wordDAOImpl = new WordDAOImpl();
     private StatisticsDAOImpl statisticsDAOImpl = new StatisticsDAOImpl();
     private ArrayList<Statistic> stats;
-    private ArrayList<Word> words;
 
     public void testChanging(){
         Scanner reader = new Scanner(System.in);

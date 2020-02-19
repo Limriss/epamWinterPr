@@ -26,7 +26,7 @@ public class WordDAOImpl implements WordDAO {
             statement.setString(1, word.getRussian());
             statement.setString(2, word.getEnglish());
 
-            int rows = statement.executeUpdate();
+            statement.executeUpdate();
             result = "Success";
         } catch (SQLException e) {
             System.out.println("Statement creating error");
