@@ -5,26 +5,14 @@ import com.epam.domain.Statistic;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Quest {
     private StatisticsDAOImpl statisticsDAOImpl = new StatisticsDAOImpl();
     private ArrayList<Statistic> stats;
 
-    public void testChanging(){
-        Scanner reader = new Scanner(System.in);
-
-        String name = reader.nextLine();
-        int wonCount = reader.nextInt();
-        int lostCount = reader.nextInt();
-
-        String result = statistic(name, wonCount, lostCount);
-        System.out.println(result);
-    }
-
-    private String statistic(String name, int wongGamesCount, int lostGamesCount){
+    private String statistic(String name, int wonGamesCount, int lostGamesCount){
         String result;
-        byte stat = (byte) (100 * wongGamesCount / (wongGamesCount + lostGamesCount));
+        byte stat = (byte) (100 * wonGamesCount / (wonGamesCount + lostGamesCount));
 
         try {
             stats = statisticsDAOImpl.read();
