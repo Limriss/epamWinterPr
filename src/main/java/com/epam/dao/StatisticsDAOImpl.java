@@ -16,38 +16,43 @@ public class StatisticsDAOImpl implements StatisticsDAO {
     }
 
     @Override
-    public String create(Statistic statistic) throws SQLException{
-        PreparedStatement statement = null;
-        String result;
-
+    public Statistic create(Statistic statistic){
         String query = SQLReader.readSQL("createStatistic.sql");
 
-        Connection connection = pool.getConnection();
+        Connection connection;
         try {
-            statement = connection.prepareStatement(query);
+            connection = pool.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        try (PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1, statistic.getName());
             statement.setByte(2, statistic.getStat());
 
             statement.executeUpdate();
-            result = "Success";
+            return statistic;
         } catch (SQLException e) {
             System.out.println("Statement creating error");
-            result = "Statement creating error";
+            return null;
         } finally {
-            if (statement != null)
-                statement.close();
             pool.realiseConnection(connection);
         }
-
-        return result;
     }
 
     @Override
-    public ArrayList<Statistic> read() throws SQLException{
+    public ArrayList<Statistic> read(){
         ArrayList<Statistic> statistics = new ArrayList<>();
 
         String query = SQLReader.readSQL("readStatistics.sql");
-        Connection connection = pool.getConnection();
+
+        Connection connection;
+        try {
+            connection = pool.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
 
         try (Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery(query);
@@ -60,34 +65,65 @@ public class StatisticsDAOImpl implements StatisticsDAO {
 
                 statistics.add(tempStatistic);
             }
+
+            return statistics;
         } catch (SQLException e) {
             System.out.println("Statement creating error");
+            return null;
         } finally {
             pool.realiseConnection(connection);
         }
-
-        return statistics;
     }
 
     @Override
-    public String update(Statistic statistic) throws SQLException{
-        String result;
-
+    public Statistic update(Statistic statistic){
         String query = SQLReader.readSQL("updateStatistic.sql");
-        Connection connection = pool.getConnection();
+
+        Connection connection;
+        try {
+            connection = pool.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setByte(1, statistic.getStat());
             statement.setString(2, statistic.getName());
 
             statement.executeUpdate();
-            result = "Success";
+            return statistic;
         } catch (SQLException e) {
             System.out.println("Statement creating error");
-            result = "Statement creating error";
+            return null;
         } finally {
             pool.realiseConnection(connection);
         }
+    }
 
-        return result;
+    @Override
+    public Statistic delete(Statistic statistic) {
+        String query = SQLReader.readSQL("deleteStatistic.sql");
+
+        Connection connection;
+        try {
+            connection = pool.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, statistic.getName());
+            statement.setByte(2, statistic.getStat());
+
+            statement.executeUpdate();
+            return statistic;
+        } catch (SQLException e) {
+            System.out.println("Statement creating error");
+            return null;
+        } finally {
+            pool.realiseConnection(connection);
+        }
     }
 }
