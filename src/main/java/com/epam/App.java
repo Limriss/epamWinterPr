@@ -22,12 +22,12 @@ public class App {
         wordDAOImpl = new WordDAOImpl();
         statisticsDAOImpl = new StatisticsDAOImpl();
 
-        saveNewWord();
-        printAllWords();
+        //saveNewWord();
+        //printAllWords();
 
-        saveNewStatistic();
-        printAllStatistics();
-        updateStatistic();
+        //saveNewStatistic();
+        //printAllStatistics();
+        //updateStatistic();
 
     }
 

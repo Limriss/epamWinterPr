@@ -1,1 +1,1 @@
-INSERT INTO words (id, rus, eng) VALUES (DEFAULT, ?, ?)
+INSERT INTO words (rus, eng, id) VALUES (?, ?, DEFAULT)
