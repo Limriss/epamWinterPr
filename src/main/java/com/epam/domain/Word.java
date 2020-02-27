@@ -16,4 +16,9 @@ public class Word {
     public String getEnglish() {
         return english;
     }
+
+    @Override
+    public String toString(){
+        return "Word russian: " + russian + "; english: " + english;
+    }
 }

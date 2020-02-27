@@ -20,4 +20,9 @@ public class Statistic {
     public void setStat(byte stat) {
         this.stat = stat;
     }
+
+    @Override
+    public String toString(){
+        return "Statistic name: " + name + "; stat: " + stat;
+    }
 }
