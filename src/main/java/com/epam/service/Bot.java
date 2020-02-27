@@ -14,9 +14,7 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Message msg = update.getMessage();
         String txt = msg.getText();
-        if (txt.equals("/start")) {
-            sendMsg(msg, "Hello, world! This is simple bot!");
-        }
+        sendMsg(msg, "Hello, world! This is simple bot!");
     }
 
     public String getBotUsername() {

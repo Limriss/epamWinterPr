@@ -1,7 +1,6 @@
 package com.epam.dao;
 
 import com.epam.dao.interfaces.WordDAO;
-import com.epam.domain.Statistic;
 import com.epam.domain.Word;
 import com.epam.utils.ConnectionPool;
 import com.epam.utils.SQLReader;
@@ -20,12 +19,7 @@ public class WordDAOImpl implements WordDAO {
     public Word create(Word word) {
         String query = SQLReader.readSQL("createWord.sql");
         Connection connection;
-        try {
-            connection = pool.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        connection = pool.getConnection();
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, word.getRussian());
@@ -47,12 +41,7 @@ public class WordDAOImpl implements WordDAO {
 
         String query = SQLReader.readSQL("readWords.sql");
         Connection connection;
-        try {
-            connection = pool.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        connection = pool.getConnection();
 
         try (Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery(query);
@@ -80,12 +69,7 @@ public class WordDAOImpl implements WordDAO {
         String query = SQLReader.readSQL("deleteWord.sql");
 
         Connection connection;
-        try {
-            connection = pool.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        connection = pool.getConnection();
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, word.getRussian());

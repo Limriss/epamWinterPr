@@ -20,12 +20,7 @@ public class StatisticsDAOImpl implements StatisticsDAO {
         String query = SQLReader.readSQL("createStatistic.sql");
 
         Connection connection;
-        try {
-            connection = pool.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        connection = pool.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1, statistic.getName());
             statement.setByte(2, statistic.getStat());
@@ -47,12 +42,7 @@ public class StatisticsDAOImpl implements StatisticsDAO {
         String query = SQLReader.readSQL("readStatistics.sql");
 
         Connection connection;
-        try {
-            connection = pool.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        connection = pool.getConnection();
 
         try (Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery(query);
@@ -80,12 +70,7 @@ public class StatisticsDAOImpl implements StatisticsDAO {
         String query = SQLReader.readSQL("updateStatistic.sql");
 
         Connection connection;
-        try {
-            connection = pool.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        connection = pool.getConnection();
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setByte(1, statistic.getStat());
@@ -106,12 +91,7 @@ public class StatisticsDAOImpl implements StatisticsDAO {
         String query = SQLReader.readSQL("deleteStatistic.sql");
 
         Connection connection;
-        try {
-            connection = pool.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        connection = pool.getConnection();
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, statistic.getName());
