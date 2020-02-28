@@ -1,11 +1,13 @@
 package main.java.com.epam.service;
 
 
+import main.java.com.epam.dao.WordDAOImpl;
 import main.java.com.epam.domain.Statistic;
 import main.java.com.epam.domain.Word;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,22 +15,32 @@ import java.util.Scanner;
 
 public class Quest {
 
-    void Operate()
+    static WordDAOImpl wordDAOImpl;
+
+    public void operate()
     {
         Scanner in = new Scanner(System.in);
+        wordDAOImpl = new WordDAOImpl();
+
+        ArrayList <Word> list = null;
+        try {
+            list = wordDAOImpl.read();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         System.out.print("Ваше имя: ");
-        int name = in.nextInt();
+        String name = in.nextLine();
         System.out.print("Количество раундов: ");
         int round = in.nextInt();
-        //System.out.printf("Your number: %d \n", num);
-        in.close();
 
         int right_ans = 0;
         int wrong_ans = 0;
         for (int j = 0; j < round; j++)
         {
-            ArrayList <Word> list = new ArrayList<>();
             ArrayList <Statistic> List2 = new ArrayList<>();
+
+            Collections.shuffle(list);
 
             String main = list.get(0).getRussian();
             String answer = list.get(0).getEnglish();
@@ -48,17 +60,15 @@ public class Quest {
             String f = "";
             for (int i = 0; i < choice.length; i++) {
                 char ind = s.charAt(i);
-                if (choice[i].equals(answer)){
+                if (choice[i].equals(answer))
                     f = String.valueOf(ind);
-                }
-                choice[i] = ind + ". " + choice[i];
-                System.out.println(choice[i]);
+                System.out.println(ind + "." + choice[i]);
             }
 
-            //BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            //Scanner in = new Scanner(System.in);
             String var = in.nextLine();
-            in.close();
+            if (j == 0) {
+                var = in.nextLine();
+            }
 
             if (var.equals(f)){
                 System.out.println("Правильно");
@@ -70,8 +80,9 @@ public class Quest {
             }
         }
 
-        int stat = (int) (right_ans/round*100);
-        System.out.printf("Правильных ответов: ", stat, "%");
+        int stat = (int) ((float) right_ans/round*100);
+        System.out.println("Правильных ответов: " + stat + "%");
+        in.close();
     }
 
 }

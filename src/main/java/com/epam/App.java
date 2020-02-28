@@ -4,6 +4,7 @@ import main.java.com.epam.dao.StatisticsDAOImpl;
 import main.java.com.epam.dao.WordDAOImpl;
 import main.java.com.epam.domain.Statistic;
 import main.java.com.epam.domain.Word;
+import main.java.com.epam.service.Quest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,12 +23,14 @@ public class App {
         wordDAOImpl = new WordDAOImpl();
         statisticsDAOImpl = new StatisticsDAOImpl();
 
-        saveNewWord();
+        /*saveNewWord();
         printAllWords();
 
         saveNewStatistic();
         printAllStatistics();
-        updateStatistic();
+        updateStatistic();*/
+        Quest quest = new Quest();
+        quest.operate();
 
     }
 
