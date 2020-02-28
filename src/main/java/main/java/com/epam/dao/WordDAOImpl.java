@@ -1,9 +1,9 @@
-package com.epam.dao;
+package main.java.com.epam.dao;
 
-import com.epam.dao.interfaces.WordDAO;
-import com.epam.domain.Word;
 import com.epam.utils.ConnectionPool;
 import com.epam.utils.SQLReader;
+import main.java.com.epam.dao.interfaces.WordDAO;
+import main.java.com.epam.domain.Word;
 
 import java.sql.*;
 import java.util.ArrayList;

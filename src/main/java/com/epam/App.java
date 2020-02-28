@@ -1,9 +1,10 @@
 package com.epam;
 
-import com.epam.dao.StatisticsDAOImpl;
-import com.epam.dao.WordDAOImpl;
-import com.epam.domain.Statistic;
-import com.epam.domain.Word;
+import main.java.com.epam.dao.StatisticsDAOImpl;
+import main.java.com.epam.dao.WordDAOImpl;
+import main.java.com.epam.domain.Statistic;
+import main.java.com.epam.domain.Word;
+import main.java.com.epam.service.Quest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,20 +19,22 @@ public class App {
     static ArrayList<Word> words;
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         wordDAOImpl = new WordDAOImpl();
         statisticsDAOImpl = new StatisticsDAOImpl();
 
-        saveNewWord();
+        /*saveNewWord();
         printAllWords();
 
         saveNewStatistic();
         printAllStatistics();
-        updateStatistic();
+        updateStatistic();*/
+        Quest quest = new Quest();
+        quest.operate();
 
     }
 
-    private static void saveNewWord(){
+    private static void saveNewWord() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         String rus;
@@ -53,21 +56,21 @@ public class App {
     private static void printAllWords() {
         try {
             words = wordDAOImpl.read();
-            for (Word word: words) {
+            for (Word word : words) {
                 System.out.println("Russian: " + word.getRussian() +
-                                   "; English: " + word.getEnglish());
+                        "; English: " + word.getEnglish());
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private static void saveNewStatistic(){
+    private static void saveNewStatistic() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         String name;
         byte stat;
-        try{
+        try {
             System.out.print("Name: ");
             name = reader.readLine();
 
@@ -84,16 +87,16 @@ public class App {
     private static void printAllStatistics() {
         try {
             stats = statisticsDAOImpl.read();
-            for (Statistic statistic: stats) {
+            for (Statistic statistic : stats) {
                 System.out.println("Name: " + statistic.getName() +
-                                   "; Stat: " + statistic.getStat());
+                        "; Stat: " + statistic.getStat());
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private static void updateStatistic(){
+    private static void updateStatistic() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         String name;

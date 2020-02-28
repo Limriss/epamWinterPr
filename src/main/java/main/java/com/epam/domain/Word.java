@@ -1,4 +1,4 @@
-package com.epam.domain;
+package main.java.com.epam.domain;
 
 public class Word {
     private String russian;
