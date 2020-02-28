@@ -1,6 +1,6 @@
-package com.epam.dao.interfaces;
+package main.java.com.epam.dao.interfaces;
 
-import com.epam.domain.Word;
+import main.java.com.epam.domain.Word;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
