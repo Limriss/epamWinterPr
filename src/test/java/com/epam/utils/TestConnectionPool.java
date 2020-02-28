@@ -1,5 +1,3 @@
-
-
 package com.epam.utils;
 import com.epam.utils.ConnectionPool;
 import org.junit.Assert;
@@ -20,18 +18,16 @@ public class TestConnectionPool {
     private static String password="postgres";
     private static ConnectionPool pool;
     private static List<Connection> availableConnections;
-    private ConnectionPool TestConnectionPool1 = new ConnectionPool();
+    private ConnectionPool testConnectionPool1 = new ConnectionPool();
 
 
 
     @Test
     public void testGetInstance() {
-        ConnectionPool cp = TestConnectionPool1.getInstance();
+        ConnectionPool cp = testConnectionPool1.getInstance();
         try {
             Connection c = cp.getConnection();
             Assert.assertTrue(!c.isClosed());
-
-
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -39,5 +35,15 @@ public class TestConnectionPool {
 
     }
 
+    @Test
+    public void testRealiseConnection()  {
+        try {
+            Connection connection = testConnectionPool1.getConnection();
+            testConnectionPool1.realiseConnection(connection);
+            Assert.assertTrue(connection.isClosed());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
