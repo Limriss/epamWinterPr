@@ -21,6 +21,8 @@ import java.util.List;
 public class Bot extends TelegramLongPollingBot {
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
     private long chatId;
+    private boolean isPlaying;
+    private Quest quest;
 
     @Value("${bot.token}")
     private String token;
@@ -43,8 +45,44 @@ public class Bot extends TelegramLongPollingBot {
                         saveNewWord(args);
                     else sendResponse("Invalid arguments count. Need only two words.");
                     break;
+                case "start":
+                    if (args.size() == 1 && !isPlaying)
+                    {
+                        quest = new Quest(message.getFrom(), Integer.parseInt(args.get(0)));
+                        String result = String.valueOf(quest.makeQuestion());
+                        if (!result.equals("")) {
+                            isPlaying = true;
+                            sendResponse(result);
+                        }
+                        else {
+                            double stat = quest.getStat();
+                            sendResponse("Game is ended. You've answered correctly on " + stat + "% questions.");
+                            isPlaying = false;
+                        }
+                    }
+                case "a":
+                case "b":
+                case "c":
+                    if (isPlaying) {
+                        String result = quest.operate(command);
+                        sendResponse(result);
+                        result = String.valueOf(quest.makeQuestion());
+                        if (!result.equals("")) {
+                            isPlaying = true;
+                            sendResponse(result);
+                        }
+                        else {
+                            double stat = quest.getStat();
+                            sendResponse("Game is ended. You've answered correctly on " + stat + "% questions.");
+                            isPlaying = false;
+                        }
+                    }
+                    else{
+                        sendResponse("You're not playing now!");
+                    }
+                    break;
                 default:
-                    sendResponse("I don't understand you.");
+                    sendResponse("To start playing you need to enter command: \"start [number of rounds]\"");
             }
         }
     }

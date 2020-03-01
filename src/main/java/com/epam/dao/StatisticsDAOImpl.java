@@ -1,9 +1,9 @@
-package main.java.com.epam.dao;
+package com.epam.dao;
 
 import com.epam.utils.ConnectionPool;
 import com.epam.utils.SQLReader;
-import main.java.com.epam.dao.interfaces.StatisticsDAO;
-import main.java.com.epam.domain.Statistic;
+import com.epam.dao.interfaces.StatisticsDAO;
+import com.epam.domain.Statistic;
 
 import java.sql.*;
 import java.util.ArrayList;

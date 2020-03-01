@@ -1,4 +1,4 @@
-package main.java.com.epam.domain;
+package com.epam.domain;
 
 public class Statistic {
     private String name;

@@ -1,6 +1,6 @@
-package main.java.com.epam.dao.interfaces;
+package com.epam.dao.interfaces;
 
-import main.java.com.epam.domain.Word;
+import com.epam.domain.Word;
 
 import java.util.ArrayList;
 

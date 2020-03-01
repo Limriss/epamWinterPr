@@ -1,9 +1,8 @@
-package main.java.com.epam.dao.interfaces;
+package com.epam.dao.interfaces;
 
 
-import main.java.com.epam.domain.Statistic;
+import com.epam.domain.Statistic;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface StatisticsDAO {
