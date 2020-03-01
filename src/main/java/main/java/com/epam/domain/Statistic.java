@@ -16,4 +16,13 @@ public class Statistic {
     public byte getStat() {
         return stat;
     }
+
+    public void setStat(byte stat) {
+        this.stat = stat;
+    }
+
+    @Override
+    public String toString(){
+        return "Statistic name: " + name + "; stat: " + stat;
+    }
 }

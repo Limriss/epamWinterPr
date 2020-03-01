@@ -54,9 +54,15 @@ public class ConnectionPool {
         return DriverManager.getConnection(url, user, password);
     }
 
-    public synchronized Connection getConnection() throws SQLException {
-        if (availableConnections.isEmpty())
-            return createConnection();
+    public synchronized Connection getConnection() {
+        if (availableConnections.isEmpty()) {
+            try {
+                return createConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
 
         Connection connection = availableConnections.get(0);
         availableConnections.remove(connection);

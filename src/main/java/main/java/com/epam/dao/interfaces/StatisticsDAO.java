@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface StatisticsDAO {
-    String create(Statistic statistic) throws SQLException;
-    ArrayList<Statistic> read() throws SQLException;
-    String update(Statistic statistic) throws SQLException;
+    Statistic create(Statistic statistic);
+    ArrayList<Statistic> read();
+    Statistic update(Statistic statistic);
+    Statistic delete(Statistic statistic);
 }

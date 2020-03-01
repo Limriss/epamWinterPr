@@ -1,0 +1,1 @@
+delete from statistics where name = ? and stat = ?

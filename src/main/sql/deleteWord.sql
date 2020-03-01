@@ -1,0 +1,1 @@
+delete from words where rus = ? and eng = ?
