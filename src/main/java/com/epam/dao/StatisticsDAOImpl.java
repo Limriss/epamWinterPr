@@ -31,7 +31,7 @@ public class StatisticsDAOImpl implements StatisticsDAO {
             System.out.println("Statement creating error");
             return null;
         } finally {
-            pool.realiseConnection(connection);
+            pool.releaseConnection(connection);
         }
     }
 
@@ -61,7 +61,7 @@ public class StatisticsDAOImpl implements StatisticsDAO {
             System.out.println("Statement creating error");
             return null;
         } finally {
-            pool.realiseConnection(connection);
+            pool.releaseConnection(connection);
         }
     }
 
@@ -82,7 +82,7 @@ public class StatisticsDAOImpl implements StatisticsDAO {
             System.out.println("Statement creating error");
             return null;
         } finally {
-            pool.realiseConnection(connection);
+            pool.releaseConnection(connection);
         }
     }
 
@@ -103,7 +103,7 @@ public class StatisticsDAOImpl implements StatisticsDAO {
             System.out.println("Statement creating error");
             return null;
         } finally {
-            pool.realiseConnection(connection);
+            pool.releaseConnection(connection);
         }
     }
 }

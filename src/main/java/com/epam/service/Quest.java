@@ -63,11 +63,14 @@ public class Quest {
                 question.append(ind).append(") ").append(choice[i]).append(";\n");
             }
             question.append("Enter a, b or c to choose answer.\n");
+            rightAnswer = f;
+
+            roundNumber--;
 
             return question;
         } else {
             statistic(user.getFirstName(), rightAnsCount, wrongAnsCount);
-            return new StringBuilder("");
+            return new StringBuilder();
         }
     }
 

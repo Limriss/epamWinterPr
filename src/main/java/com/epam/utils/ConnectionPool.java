@@ -70,7 +70,7 @@ public class ConnectionPool {
         return connection;
     }
 
-    public synchronized void realiseConnection(Connection connection){
+    public synchronized void releaseConnection(Connection connection){
         if (connection == null){
             return;
         }

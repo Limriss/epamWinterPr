@@ -31,7 +31,7 @@ public class WordDAOImpl implements WordDAO {
             System.out.println("Statement creating error");
             return null;
         } finally {
-            pool.realiseConnection(connection);
+            pool.releaseConnection(connection);
         }
     }
 
@@ -60,7 +60,7 @@ public class WordDAOImpl implements WordDAO {
             System.out.println("Statement creating error");
             return null;
         } finally {
-            pool.realiseConnection(connection);
+            pool.releaseConnection(connection);
         }
     }
 
@@ -81,7 +81,7 @@ public class WordDAOImpl implements WordDAO {
             System.out.println("Statement creating error");
             return null;
         } finally {
-            pool.realiseConnection(connection);
+            pool.releaseConnection(connection);
         }
     }
 }
