@@ -17,7 +17,7 @@ public class ConnectionPool {
     private static ConnectionPool pool;
     private static List<Connection> availableConnections;
 
-    private ConnectionPool(){}
+    ConnectionPool(){}
 
     public static ConnectionPool getInstance(){
         ConnectionPool localPool = pool;
