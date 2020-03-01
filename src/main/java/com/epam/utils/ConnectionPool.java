@@ -17,7 +17,7 @@ public class ConnectionPool {
     private static ConnectionPool pool;
     private static List<Connection> availableConnections;
 
-    ConnectionPool(){}
+    private ConnectionPool(){}
 
     public static ConnectionPool getInstance(){
         ConnectionPool localPool = pool;
@@ -77,8 +77,8 @@ public class ConnectionPool {
 
         try {
             if (availableConnections.size() < CAPACITY && !connection.isClosed()){
-                connection.setAutoCommit(true);
-                availableConnections.add(connection);
+                connection.close();
+                availableConnections.add(createConnection());
             }
             else
                 connection.close();
