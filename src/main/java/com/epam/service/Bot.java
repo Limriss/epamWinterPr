@@ -81,6 +81,7 @@ public class Bot extends TelegramLongPollingBot {
                         sendResponse(result, inlineKeyboardMarkup);
                     else {
                         double stat = quest.getStat();
+                        quests.remove(user);
                         sendResponse("Game is ended. You've answered correctly on " + stat + "% questions.");
                     }
                 }
@@ -103,6 +104,7 @@ public class Bot extends TelegramLongPollingBot {
                         sendResponse(result, inlineKeyboardMarkup);
                     else {
                         double stat = quest.getStat();
+                        quests.remove(user);
                         sendResponse("Game is ended. You've answered correctly on " + Math.round(stat) + "% questions.");
                     }
                 }
