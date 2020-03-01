@@ -11,21 +11,19 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class Bot extends TelegramLongPollingBot {
     private static final Logger logger = LoggerFactory.getLogger(Bot.class);
     private long chatId;
-    private boolean isPlaying;
-    private Quest quest;
+    private Map<User, Quest> quests = new HashMap<>();
     private static InlineKeyboardMarkup inlineKeyboardMarkup;
 
     static{
@@ -50,38 +48,40 @@ public class Bot extends TelegramLongPollingBot {
         String command = "";
         List<String> args = new ArrayList<>();
         Message message = update.getMessage();
+        User user = null;
 
         if (update.hasMessage()) {
             chatId = message.getChatId();
+            user = message.getFrom();
             args = new ArrayList<>(Arrays.asList(message.getText().split(" ")));
-            command = args.get(0);
+            command = args.get(0).toLowerCase();
             args.remove(0);
         }
         else if (update.hasCallbackQuery()){
             command = update.getCallbackQuery().getData();
+            user = update.getCallbackQuery().getFrom();
             chatId = update.getCallbackQuery().getMessage().getChatId();
         }
 
         switch (command){
-            case "saveNewWord":
+            case "save_new_word":
                 if (args.size() == 2)
                     saveNewWord(args);
                 else sendResponse("Invalid arguments count. Need only two words.");
                 break;
             case "start":
-                if (args.size() == 1 && !isPlaying)
+                if (args.size() == 1 && !quests.containsKey(user))
                 {
-                    quest = new Quest(message.getFrom(), Integer.parseInt(args.get(0)));
-                    String result = String.valueOf(quest.makeQuestion());
-                    if (!result.equals("")) {
-                        isPlaying = true;
+                    Quest quest = new Quest(message.getFrom(), Integer.parseInt(args.get(0)));
+                    quests.put(message.getFrom(), quest);
 
+                    String result = String.valueOf(quest.makeQuestion());
+
+                    if (!result.equals(""))
                         sendResponse(result, inlineKeyboardMarkup);
-                    }
                     else {
                         double stat = quest.getStat();
                         sendResponse("Game is ended. You've answered correctly on " + stat + "% questions.");
-                        isPlaying = false;
                     }
                 }
                 else{
@@ -91,18 +91,19 @@ public class Bot extends TelegramLongPollingBot {
             case "a":
             case "b":
             case "c":
-                if (isPlaying) {
+                if (quests.containsKey(user)) {
+                    Quest quest = quests.get(user);
                     String result = quest.operate(command);
+
                     sendResponse(result);
+
                     result = String.valueOf(quest.makeQuestion());
-                    if (!result.equals("")) {
-                        isPlaying = true;
+
+                    if (!result.equals(""))
                         sendResponse(result, inlineKeyboardMarkup);
-                    }
                     else {
                         double stat = quest.getStat();
                         sendResponse("Game is ended. You've answered correctly on " + Math.round(stat) + "% questions.");
-                        isPlaying = false;
                     }
                 }
                 else{
@@ -110,11 +111,12 @@ public class Bot extends TelegramLongPollingBot {
                 }
                 break;
             case "stop":
-                isPlaying = false;
+                quests.remove(user);
                 sendResponse("Stopped.");
                 break;
             default:
                 sendResponse("To start playing you need to enter command: \"start [number of rounds]\"");
+                sendResponse("If you're already playing, so you've entered something wrong.");
         }
     }
 
