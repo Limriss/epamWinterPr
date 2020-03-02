@@ -4,6 +4,7 @@ import java.io.*;
 
 public class SQLReader {
 
+    //public SQLReader(){}
     public static String readSQL(String fileName){
         String resultQuery;
 

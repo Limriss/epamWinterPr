@@ -1,9 +1,9 @@
-package main.java.com.epam.dao;
+package com.epam.dao;
 
 import com.epam.utils.ConnectionPool;
 import com.epam.utils.SQLReader;
-import main.java.com.epam.dao.interfaces.WordDAO;
-import main.java.com.epam.domain.Word;
+import com.epam.dao.interfaces.WordDAO;
+import com.epam.domain.Word;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,33 +16,32 @@ public class WordDAOImpl implements WordDAO {
     }
 
     @Override
-    public String create(Word word) throws SQLException {
-        String result;
-
+    public Word create(Word word) {
         String query = SQLReader.readSQL("createWord.sql");
-        Connection connection = pool.getConnection();
+        Connection connection;
+        connection = pool.getConnection();
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, word.getRussian());
             statement.setString(2, word.getEnglish());
 
-            int rows = statement.executeUpdate();
-            result = rows + " rows was created";
+            statement.executeUpdate();
+            return word;
         } catch (SQLException e) {
             System.out.println("Statement creating error");
-            result = "Statement creating error";
+            return null;
         } finally {
-            pool.realiseConnection(connection);
+            pool.releaseConnection(connection);
         }
-        return result;
     }
 
     @Override
-    public ArrayList<Word> read() throws SQLException {
+    public ArrayList<Word> read(){
         ArrayList<Word> words = new ArrayList<>();
 
         String query = SQLReader.readSQL("readWords.sql");
-        Connection connection = pool.getConnection();
+        Connection connection;
+        connection = pool.getConnection();
 
         try (Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery(query);
@@ -55,12 +54,34 @@ public class WordDAOImpl implements WordDAO {
 
                 words.add(tempWord);
             }
+
+            return words;
         } catch (SQLException e) {
             System.out.println("Statement creating error");
+            return null;
         } finally {
-            pool.realiseConnection(connection);
+            pool.releaseConnection(connection);
         }
+    }
 
-        return words;
+    @Override
+    public Word delete(Word word) {
+        String query = SQLReader.readSQL("deleteWord.sql");
+
+        Connection connection;
+        connection = pool.getConnection();
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, word.getRussian());
+            statement.setString(2, word.getEnglish());
+
+            statement.executeUpdate();
+            return word;
+        } catch (SQLException e) {
+            System.out.println("Statement creating error");
+            return null;
+        } finally {
+            pool.releaseConnection(connection);
+        }
     }
 }

@@ -54,9 +54,15 @@ public class ConnectionPool {
         return DriverManager.getConnection(url, user, password);
     }
 
-    public synchronized Connection getConnection() throws SQLException {
-        if (availableConnections.isEmpty())
-            return createConnection();
+    public synchronized Connection getConnection() {
+        if (availableConnections.isEmpty()) {
+            try {
+                return createConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
 
         Connection connection = availableConnections.get(0);
         availableConnections.remove(connection);
@@ -64,15 +70,15 @@ public class ConnectionPool {
         return connection;
     }
 
-    public synchronized void realiseConnection(Connection connection){
+    public synchronized void releaseConnection(Connection connection){
         if (connection == null){
             return;
         }
 
         try {
             if (availableConnections.size() < CAPACITY && !connection.isClosed()){
-                connection.setAutoCommit(true);
-                availableConnections.add(connection);
+                connection.close();
+                availableConnections.add(createConnection());
             }
             else
                 connection.close();
